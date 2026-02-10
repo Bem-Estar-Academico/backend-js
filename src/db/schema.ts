@@ -103,7 +103,7 @@ export const reviewRegistrationsTable = pgTable("review_registrations", {
     studentRegistrationId: integer('student_registration_id').notNull().unique().references(() => studentRegistrationsTable.id),
     review: json(),
     status: registrationStatusEnum().notNull().default('PENDING'),
-    ivs: numeric({ precision: 10, scale: 4 }),
+    ivs: numeric({ precision: 3 }),
     approvedFoodAllowance: boolean('approved_food_allowance').notNull().default(false),
     approvedHousingAllowance: boolean('approved_housing_allowance').notNull().default(false),
     approvedDaycareAllowance: boolean('approved_daycare_allowance').notNull().default(false),
