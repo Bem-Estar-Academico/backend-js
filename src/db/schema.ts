@@ -23,7 +23,7 @@ export const usersTable = pgTable("users", {
 export const periodsTable = pgTable("periods", {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
     name: varchar({ length: 255 }).notNull().unique(),
-    initDate: timestamp("init_date", { withTimezone: true }).notNull(),
+    startDate: timestamp("start_date", { withTimezone: true }).notNull(),
     endDate: timestamp("end_date", { withTimezone: true }).notNull(),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp("updated_at", { withTimezone: true })
