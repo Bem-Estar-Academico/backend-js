@@ -27,7 +27,7 @@ export abstract class Edital {
       .from(editaisTable)
       .where(eq(editaisTable.id, id))
 
-    return edital;
+    return edital[0];
   }
 
   static async updateEdital(id: number, data: any) {
