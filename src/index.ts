@@ -1,6 +1,7 @@
 import { db } from './db';
 import { Elysia } from "elysia";
 import { cors } from '@elysiajs/cors';
+import { routes } from './routes/index';
 import { swagger } from '@elysiajs/swagger';
 import { edital } from './modules/edital';
 
