@@ -1,43 +1,85 @@
 import { db } from '@/db'
 import { status } from 'elysia'
-import { eq } from 'drizzle-orm'
-import type { EditalModel } from './model'
+import { eq, gt } from 'drizzle-orm'
 import { editaisTable } from '@/db/schema'
+import type { EditalModel } from './model'
 
 export abstract class Edital {
-  static async listAll() {
-    try {
-      const editais = await db
-        .select()
-        .from(editaisTable)
+  static async getAll() {
+    const editais = await db
+      .select()
+      .from(editaisTable)
 
-      return editais
-    }
-    catch {
-      throw status(
-				500,
-				'Internal Server Error'
-			)
-    }
+    return editais
+  }
+
+  static async getActives() {
+    const editais = await db
+      .select()
+      .from(editaisTable)
+      .where(gt(editaisTable.registrationEndDate, new Date()))
+
+    return editais
   }
 
   static async getEditalById(id: number) {
-    const edital = await db
+    const [edital] = await db
       .select()
       .from(editaisTable)
       .where(eq(editaisTable.id, id))
-
-    return edital[0];
+    
+    if (!edital) {
+      throw status(404, 'Edital not found')
+    }
+    
+    return edital
   }
 
-  static async updateEdital(id: number, data: any) {
-    const [edital] = await db
-      .update(editaisTable)
-      .set(data)
-      .where(eq(editaisTable.id, id))
-      .returning()
+  static async create(data: EditalModel.createBody) {
+    try {
+      const [edital] = await db
+        .insert(editaisTable)
+        .values(data as any)
+        .returning()
+      
+      return edital
+    } catch (err) {
+      throw status(400, 'Failed to create edital')
+    }
+  }
 
-    return edital;
+  static async update(id: number, data: Partial<EditalModel.createBody>) {
+    try {
+      const [edital] = await db
+        .update(editaisTable)
+        .set(data)
+        .where(eq(editaisTable.id, id))
+        .returning()
+      
+      if (!edital) {
+        throw status(404, 'Edital not found')
+      }
+      
+      return edital
+    } catch (err) {
+      throw status(400, 'Failed to update edital')
+    }
+  }
+
+  static async delete(id: number) {
+    try {
+      const [edital] = await db
+        .delete(editaisTable)
+        .where(eq(editaisTable.id, id))
+        .returning()
+      
+      if (!edital) {
+        throw status(404, 'Edital not found')
+      }
+      
+      return edital
+    } catch (err) {
+      throw status(400, 'Failed to delete edital')
+    }
   }
 }
-
