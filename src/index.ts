@@ -1,8 +1,8 @@
 import { db } from './db';
 import { Elysia } from "elysia";
 import { cors } from '@elysiajs/cors';
+import { routes } from './routes/index';
 import { swagger } from '@elysiajs/swagger';
-import { editalRoutes } from './routes/editais';
 
 const app = new Elysia()
   .use(cors())
@@ -17,7 +17,7 @@ const app = new Elysia()
   }))
   .decorate('db', db)
   .get("/", () => ({ message: "BEA API" }))
-  .use(editalRoutes)
+  .use(routes)
   .listen(3000);
 
 console.log(`Elysia is running at ${app.server?.hostname}:${app.server?.port}`);
