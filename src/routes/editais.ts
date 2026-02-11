@@ -1,15 +1,15 @@
 import { db } from '../db';
 import { Elysia } from 'elysia';
 import { eq } from 'drizzle-orm';
-import * as schema from '../db/schema';
+import { editaisTable } from '../db/schema';
 
 export const editalRoutes = new Elysia({ prefix: '/editais' })
   .get('/', async () => {
-    return await db.select().from(schema.editaisTable);
+    return await db.select().from(editaisTable);
   })
   .get('/:id', async ({ params: { id } }) => {
     const result = await db.select()
-    .from(schema.editaisTable)
-    .where(eq(schema.editaisTable.id, Number(id)));
+    .from(editaisTable)
+    .where(eq(editaisTable.id, Number(id)));
     return result[0] ?? null;
   });
