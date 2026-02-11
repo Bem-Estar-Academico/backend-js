@@ -127,7 +127,7 @@ export const appealsTable = pgTable("appeals", {
     fulfilledAt: timestamp("fulfilled_at", { withTimezone: true }),
 });
 
-const relations = defineRelations({
+export const relations = defineRelations({
     editaisTable, appealsTable, studentRegistrationsTable, editalDocumentsTable,
     studentDocumentsTable, usersTable, reviewRegistrationsTable, editalTeamsTable,
 }, (r: any) => ({
