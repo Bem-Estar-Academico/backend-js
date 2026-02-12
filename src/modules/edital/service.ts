@@ -4,6 +4,7 @@ import { eq, gt } from 'drizzle-orm'
 import { editaisTable } from '@/db/schema'
 import type { EditalModel } from './model'
 
+
 export abstract class Edital {
   static async getAll() {
     const editais = await db

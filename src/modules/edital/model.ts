@@ -5,6 +5,7 @@ import { editaisTable } from '@/db/schema'
 const editalSchema = createSelectSchema(editaisTable)
 const insertEditalSchema = createInsertSchema(editaisTable)
 
+
 export namespace EditalModel {
   // Response types
   export const getAllResponse = t.Array(editalSchema)

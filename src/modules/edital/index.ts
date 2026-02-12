@@ -2,6 +2,7 @@ import { Elysia, t } from 'elysia'
 import { Edital } from './service'
 import { EditalModel } from './model'
 
+
 export const edital = new Elysia({ prefix: '/editais' })
   .get(
     '/',
