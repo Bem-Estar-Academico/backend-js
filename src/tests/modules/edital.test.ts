@@ -8,8 +8,8 @@ describe('Edital Integration Suite', () => {
   nextMonth.setMonth(today.getMonth() + 1)
 
   const mockEdital = {
-    title: 'Edital de Teste Automatizado',
-    description: 'Descrição completa para teste de integração',
+    title: 'Automated Test Edital',
+    description: 'Full description for integration test',
     registrationStartDate: today.toISOString(),
     registrationEndDate: nextMonth.toISOString(),
     foodAllowance: true,
@@ -17,8 +17,8 @@ describe('Edital Integration Suite', () => {
   }
 
   const updatedEditalPayload = {
-    title: 'Edital Atualizado',
-    description: 'Descrição atualizada via PUT',
+    title: 'Updated Edital',
+    description: 'Updated description via PUT',
     housingAllowance: true 
   }
 
@@ -45,7 +45,7 @@ describe('Edital Integration Suite', () => {
     createdId = data.id
   })
 
-  it('should retrieve all editais', async () => {
+  it('should retrieve all editals', async () => {
     const response = await app.handle(new Request('http://localhost/editais/'))
     
     expect(response.status).toBe(200)
@@ -57,7 +57,7 @@ describe('Edital Integration Suite', () => {
     expect(exists).toBeDefined()
   })
 
-  it('should retrieve active editais', async () => {
+  it('should retrieve active editals', async () => {
     const response = await app.handle(new Request('http://localhost/editais/active'))
     
     expect(response.status).toBe(200)
