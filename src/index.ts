@@ -1,11 +1,10 @@
 import { db } from './db';
 import { Elysia } from "elysia";
 import { cors } from '@elysiajs/cors';
-import { routes } from './routes/index';
 import { swagger } from '@elysiajs/swagger';
 import { edital } from './modules/edital';
 
-const app = new Elysia()
+export const app = new Elysia()
   .use(cors())
   .use(swagger({
     path: '/docs',
@@ -18,7 +17,9 @@ const app = new Elysia()
   }))
   .decorate('db', db)
   .get("/", () => ({ message: "BEA API" }))
-  .use(edital)
-  .listen(3000);
+  .use(edital);
 
-console.log(`Elysia is running at ${app.server?.hostname}:${app.server?.port}`);
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(3000);
+  console.log(`Elysia is running at ${app.server?.hostname}:${app.server?.port}`);
+}
