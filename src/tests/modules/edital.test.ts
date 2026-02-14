@@ -79,6 +79,61 @@ describe('Edital Integration Suite', () => {
     expect(data.title).toBe(mockEdital.title)
   })
 
+  it('should retrieve edital with null registrationEndDate in active list', async () => {
+    const nullEndDateEdital = {
+      ...mockEdital,
+      title: 'Null End Date Edital',
+      registrationEndDate: null
+    }
+
+    const createResponse = await app.handle(
+      new Request('http://localhost/editais/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(nullEndDateEdital)
+      })
+    )
+    const created = await createResponse.json()
+
+    const response = await app.handle(new Request('http://localhost/editais/active'))
+    const actives = await response.json()
+    
+    const exists = actives.find((item: any) => item.id === created.id)
+    expect(exists).toBeDefined()
+
+    // Clean up
+    await app.handle(new Request(`http://localhost/editais/${created.id}`, { method: 'DELETE' }))
+  })
+
+  it('should not retrieve edital that hasn\'t started yet in active list', async () => {
+    const futureDate = new Date()
+    futureDate.setFullYear(today.getFullYear() + 1)
+
+    const futureEdital = {
+      ...mockEdital,
+      title: 'Future Edital',
+      registrationStartDate: futureDate.toISOString()
+    }
+
+    const createResponse = await app.handle(
+      new Request('http://localhost/editais/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(futureEdital)
+      })
+    )
+    const created = await createResponse.json()
+
+    const response = await app.handle(new Request('http://localhost/editais/active'))
+    const actives = await response.json()
+    
+    const exists = actives.find((item: any) => item.id === created.id)
+    expect(exists).toBeUndefined()
+
+    // Clean up
+    await app.handle(new Request(`http://localhost/editais/${created.id}`, { method: 'DELETE' }))
+  })
+
   it('should update the existing edital', async () => {
     const response = await app.handle(
       new Request(`http://localhost/editais/${createdId}`, {

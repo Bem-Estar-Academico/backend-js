@@ -1,6 +1,6 @@
 import { db } from '@/db'
 import { status } from 'elysia'
-import { eq, gt } from 'drizzle-orm'
+import { and, eq, gt, isNull, lte, or } from 'drizzle-orm'
 import { editaisTable } from '@/db/schema'
 import type { EditalModel } from './model'
 
@@ -14,10 +14,19 @@ export abstract class Edital {
   }
 
   static async getActives() {
+    const now = new Date()
     const editais = await db
       .select()
       .from(editaisTable)
-      .where(gt(editaisTable.registrationEndDate, new Date()))
+      .where(
+        and(
+          lte(editaisTable.registrationStartDate, now),
+          or(
+            isNull(editaisTable.registrationEndDate),
+            gt(editaisTable.registrationEndDate, now)
+          )
+        )
+      )
 
     return editais
   }
