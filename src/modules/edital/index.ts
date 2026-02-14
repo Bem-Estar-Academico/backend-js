@@ -79,6 +79,7 @@ export const edital = new Elysia({ prefix: '/editais' })
           message: t.String(),
           edital: EditalModel.editalResponse
         }),
+        400: t.Object({ message: t.String() }),
         404: t.Object({ message: t.String() })
       }
     }
