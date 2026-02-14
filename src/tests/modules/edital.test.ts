@@ -31,13 +31,15 @@ describe('Edital Integration Suite', () => {
       })
     )
 
+    const bodyText = await response.text()
+
     if (response.status !== 200) {
-      console.error(await response.json())
+      console.error(bodyText)
     }
 
     expect(response.status).toBe(200)
     
-    const data = await response.json()
+    const data = JSON.parse(bodyText)
     expect(data).toHaveProperty('id')
     expect(data.title).toBe(mockEdital.title)
     expect(data.foodAllowance).toBe(true)
