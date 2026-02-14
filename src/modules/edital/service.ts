@@ -1,6 +1,6 @@
 import { db } from '@/db'
 import { status } from 'elysia'
-import { and, eq, gt, isNull, lte, or, type InferInsertModel } from 'drizzle-orm'
+import { and, eq, gt, isNull, lte, or } from 'drizzle-orm'
 import { editaisTable } from '@/db/schema'
 import type { EditalModel } from './model'
 
