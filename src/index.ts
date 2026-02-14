@@ -3,6 +3,7 @@ import { Elysia } from "elysia";
 import { cors } from '@elysiajs/cors';
 import { swagger } from '@elysiajs/swagger';
 import { edital } from './modules/edital';
+import pkg from '../package.json';
 
 export const app = new Elysia()
   .use(cors())
@@ -11,7 +12,7 @@ export const app = new Elysia()
     documentation: {
       info: {
         title: 'BEA API Documentation',
-        version: '1.8.1'
+        version: pkg.version
       }
     }
   }))

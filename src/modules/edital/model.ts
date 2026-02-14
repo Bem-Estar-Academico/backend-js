@@ -1,6 +1,7 @@
 import { t } from 'elysia'
 import { createInsertSchema, createSelectSchema } from 'drizzle-typebox'
 import { editaisTable } from '@/db/schema'
+import { spread } from '@/db/utils'
 
 const editalSchema = createSelectSchema(editaisTable)
 const insertEditalSchema = createInsertSchema(editaisTable)
@@ -20,10 +21,9 @@ export namespace EditalModel {
   export type updateResponse = typeof updateResponse.static
 
   // Body types
-  export const createBody = t.Omit(insertEditalSchema, ['id', 'createdAt', 'updatedAt'])
+  export const createBody = t.Object(spread(editaisTable, 'insert'))
   export type createBody = typeof createBody.static
 
-  export const updateBody = t.Partial(t.Omit(insertEditalSchema, ['id', 'createdAt', 'updatedAt']))
+  export const updateBody = t.Partial(createBody)
   export type updateBody = typeof updateBody.static
-
 }

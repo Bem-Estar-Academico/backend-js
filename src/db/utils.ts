@@ -10,7 +10,6 @@ import {
     BuildSchema,
 } from 'drizzle-typebox'
 
-import { table } from './schema'
 import type { Table } from 'drizzle-orm'
 
 type Spread<

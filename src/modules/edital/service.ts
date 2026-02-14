@@ -1,6 +1,6 @@
 import { db } from '@/db'
 import { status } from 'elysia'
-import { and, eq, gt, isNull, lte, or } from 'drizzle-orm'
+import { and, eq, gt, isNull, lte, or, type InferInsertModel } from 'drizzle-orm'
 import { editaisTable } from '@/db/schema'
 import type { EditalModel } from './model'
 
@@ -38,7 +38,7 @@ export abstract class Edital {
       .where(eq(editaisTable.id, id))
     
     if (!edital) {
-      throw status(404, 'Edital not found')
+      throw status(404, { message: 'Edital not found' })
     }
     
     return edital
@@ -48,12 +48,13 @@ export abstract class Edital {
     try {
       const [edital] = await db
         .insert(editaisTable)
-        .values(data as any)
+        .values(data)
         .returning()
       
       return edital
     } catch (err) {
-      throw status(400, 'Failed to create edital')
+      console.error(err)
+      throw status(400, { message: 'Failed to create edital' })
     }
   }
 
@@ -66,11 +67,12 @@ export abstract class Edital {
         .where(eq(editaisTable.id, id))
         .returning()
     } catch (err) {
-      throw status(400, 'Failed to update edital')
+      console.error(err)
+      throw status(400, { message: 'Failed to update edital' })
     }
 
     if (!edital) {
-      throw status(404, 'Edital not found')
+      throw status(404, { message: 'Edital not found' })
     }
 
     return edital
@@ -84,11 +86,12 @@ export abstract class Edital {
         .where(eq(editaisTable.id, id))
         .returning()
     } catch (err) {
-      throw status(400, 'Failed to delete edital')
+      console.error(err)
+      throw status(400, { message: 'Failed to delete edital' })
     }
 
     if (!edital) {
-      throw status(404, 'Edital not found')
+      throw status(404, { message: 'Edital not found' })
     }
 
     return edital
