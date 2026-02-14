@@ -24,7 +24,7 @@ describe('Edital Integration Suite', () => {
 
   it('should create a new edital successfully', async () => {
     const response = await app.handle(
-      new Request('http://localhost/editais/', {
+      new Request('http://localhost/api/v1/editais/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(mockEdital)
@@ -48,7 +48,7 @@ describe('Edital Integration Suite', () => {
   })
 
   it('should retrieve all editals', async () => {
-    const response = await app.handle(new Request('http://localhost/editais/'))
+    const response = await app.handle(new Request('http://localhost/api/v1/editais/'))
     
     expect(response.status).toBe(200)
     
@@ -60,7 +60,7 @@ describe('Edital Integration Suite', () => {
   })
 
   it('should retrieve active editals', async () => {
-    const response = await app.handle(new Request('http://localhost/editais/active'))
+    const response = await app.handle(new Request('http://localhost/api/v1/editais/active'))
     
     expect(response.status).toBe(200)
     
@@ -72,7 +72,7 @@ describe('Edital Integration Suite', () => {
   })
 
   it('should retrieve the specific edital by id', async () => {
-    const response = await app.handle(new Request(`http://localhost/editais/${createdId}`))
+    const response = await app.handle(new Request(`http://localhost/api/v1/editais/${createdId}`))
     
     expect(response.status).toBe(200)
     
@@ -89,7 +89,7 @@ describe('Edital Integration Suite', () => {
     }
 
     const createResponse = await app.handle(
-      new Request('http://localhost/editais/', {
+      new Request('http://localhost/api/v1/editais/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(nullEndDateEdital)
@@ -97,14 +97,14 @@ describe('Edital Integration Suite', () => {
     )
     const created = await createResponse.json()
 
-    const response = await app.handle(new Request('http://localhost/editais/active'))
+    const response = await app.handle(new Request('http://localhost/api/v1/editais/active'))
     const actives = await response.json()
     
     const exists = actives.find((item: any) => item.id === created.id)
     expect(exists).toBeDefined()
 
     // Clean up
-    await app.handle(new Request(`http://localhost/editais/${created.id}`, { method: 'DELETE' }))
+    await app.handle(new Request(`http://localhost/api/v1/editais/${created.id}`, { method: 'DELETE' }))
   })
 
   it('should not retrieve edital that hasn\'t started yet in active list', async () => {
@@ -118,7 +118,7 @@ describe('Edital Integration Suite', () => {
     }
 
     const createResponse = await app.handle(
-      new Request('http://localhost/editais/', {
+      new Request('http://localhost/api/v1/editais/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(futureEdital)
@@ -126,19 +126,19 @@ describe('Edital Integration Suite', () => {
     )
     const created = await createResponse.json()
 
-    const response = await app.handle(new Request('http://localhost/editais/active'))
+    const response = await app.handle(new Request('http://localhost/api/v1/editais/active'))
     const actives = await response.json()
     
     const exists = actives.find((item: any) => item.id === created.id)
     expect(exists).toBeUndefined()
 
     // Clean up
-    await app.handle(new Request(`http://localhost/editais/${created.id}`, { method: 'DELETE' }))
+    await app.handle(new Request(`http://localhost/api/v1/editais/${created.id}`, { method: 'DELETE' }))
   })
 
   it('should update the existing edital', async () => {
     const response = await app.handle(
-      new Request(`http://localhost/editais/${createdId}`, {
+      new Request(`http://localhost/api/v1/editais/${createdId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedEditalPayload)
@@ -155,7 +155,7 @@ describe('Edital Integration Suite', () => {
 
   it('should delete the edital', async () => {
     const response = await app.handle(
-      new Request(`http://localhost/editais/${createdId}`, {
+      new Request(`http://localhost/api/v1/editais/${createdId}`, {
         method: 'DELETE'
       })
     )
@@ -167,7 +167,7 @@ describe('Edital Integration Suite', () => {
   })
 
   it('should return 404 when trying to get a deleted edital', async () => {
-    const response = await app.handle(new Request(`http://localhost/editais/${createdId}`))
+    const response = await app.handle(new Request(`http://localhost/api/v1/editais/${createdId}`))
     
     expect(response.status).toBe(404)
   })

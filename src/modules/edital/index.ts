@@ -2,12 +2,21 @@ import { Elysia, t } from 'elysia'
 import { Edital } from './service'
 import { EditalModel } from './model'
 
-export const edital = new Elysia({ prefix: '/editais' })
+export const edital = new Elysia({ prefix: '/api/v1/editais' })
   .get(
     '/',
-    async () => {
-      return Edital.getAll() 
+    async ({ query }) => {
+      return Edital.getAll({
+        year: query.year,
+        page: query.page,
+        limit: query.limit
+      }) 
     }, {
+      query: t.Object({
+        year: t.Optional(t.Numeric()),
+        page: t.Optional(t.Numeric()),
+        limit: t.Optional(t.Numeric())
+      }),
       response: {
         200: EditalModel.getAllResponse,
       }

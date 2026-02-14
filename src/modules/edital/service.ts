@@ -1,14 +1,25 @@
 import { db } from '@/db'
 import { status } from 'elysia'
-import { and, eq, gt, isNull, lte, or } from 'drizzle-orm'
+import { and, eq, gt, isNull, lte, or, sql } from 'drizzle-orm'
 import { editaisTable } from '@/db/schema'
 import type { EditalModel } from './model'
 
 export abstract class Edital {
-  static async getAll() {
+  static async getAll(options?: { year?: number; page?: number; limit?: number }) {
+    const { year, page = 1, limit = 10 } = options || {}
+    const offset = (page - 1) * limit
+
+    const whereConditions = []
+    if (year) {
+      whereConditions.push(sql`EXTRACT(YEAR FROM ${editaisTable.registrationStartDate}) = ${year}`)
+    }
+
     const editais = await db
       .select()
       .from(editaisTable)
+      .where(whereConditions.length > 0 ? and(...whereConditions) : undefined)
+      .limit(limit)
+      .offset(offset)
 
     return editais
   }
@@ -36,11 +47,11 @@ export abstract class Edital {
       .select()
       .from(editaisTable)
       .where(eq(editaisTable.id, id))
-    
+
     if (!edital) {
       throw status(404, { message: 'Edital not found' })
     }
-    
+
     return edital
   }
 
@@ -50,7 +61,7 @@ export abstract class Edital {
         .insert(editaisTable)
         .values(data)
         .returning()
-      
+
       return edital
     } catch (err) {
       console.error(err)
