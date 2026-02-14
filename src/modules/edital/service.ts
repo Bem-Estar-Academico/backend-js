@@ -49,37 +49,39 @@ export abstract class Edital {
   }
 
   static async update(id: number, data: Partial<EditalModel.createBody>) {
+    let edital
     try {
-      const [edital] = await db
+      ;[edital] = await db
         .update(editaisTable)
         .set(data)
         .where(eq(editaisTable.id, id))
         .returning()
-      
-      if (!edital) {
-        throw status(404, 'Edital not found')
-      }
-      
-      return edital
     } catch (err) {
       throw status(400, 'Failed to update edital')
     }
+
+    if (!edital) {
+      throw status(404, 'Edital not found')
+    }
+
+    return edital
   }
 
   static async delete(id: number) {
+    let edital
     try {
-      const [edital] = await db
+      ;[edital] = await db
         .delete(editaisTable)
         .where(eq(editaisTable.id, id))
         .returning()
-      
-      if (!edital) {
-        throw status(404, 'Edital not found')
-      }
-      
-      return edital
     } catch (err) {
       throw status(400, 'Failed to delete edital')
     }
+
+    if (!edital) {
+      throw status(404, 'Edital not found')
+    }
+
+    return edital
   }
 }
