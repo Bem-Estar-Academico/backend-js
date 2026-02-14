@@ -1,9 +1,10 @@
 {
   "name": "backend-js",
-  "version": "1.0.50",
+  "version": "1.8.1",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "bun run --watch src/index.ts"
+    "test": "NODE_ENV=test bun test --env-file .env.test --preload ./src/tests/setup.ts",
+    "test:watch": "NODE_ENV=test bun test --watch --env-file .env.test --preload ./src/tests/setup.ts",
+    "dev": "bun --watch src/index.js"
   },
   "dependencies": {
     "@elysiajs/cors": "^1.4.1",
